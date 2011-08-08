@@ -45,7 +45,7 @@
   </table>
 
   <table id="tasks" class="board" cellspacing="0">
-    <%- @sprint.stories.each do |story| %>
+    <%- @sprint.all_stories.each do |story| %>
     <tr>
       <td>
         <div class="story <%= mark_if_closed(story) %>" style="border-top: 3px solid <%= build_inline_style_color(story) %>">

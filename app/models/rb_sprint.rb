@@ -7,7 +7,7 @@ class Burndown
     @sprint_id = sprint.id
     @days = sprint.days(:all)
 
-    stories = sprint.stories | Journal.find(:all, :joins => :details,
+    stories = sprint.all_stories | Journal.find(:all, :joins => :details,
                                             :conditions => ["journalized_type = 'Issue'
                                                             and property = 'attr' and prop_key = 'fixed_version_id'
                                                             and (value = ? or old_value = ?)", sprint.id, sprint.id]).collect{|j| j.journalized.becomes(RbStory) }
@@ -96,9 +96,20 @@ class RbSprint < Version
             :conditions => [ "status = 'open' and project_id = ?", project.id ]
         }
     }
+    
+    named_scope :all_open_sprints, lambda { |project_ids|
+        {
+            :order => 'sprint_start_date ASC, effective_date ASC',
+            :conditions => [ "status = 'open' and project_id in (?)", project_ids ]
+        }
+    }
 
     def stories
         return RbStory.sprint_backlog(self)
+    end
+    
+    def all_stories
+        return RbStory.sprint_backlog(self, {:all => true})
     end
 
     def points

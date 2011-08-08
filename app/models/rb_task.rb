@@ -36,6 +36,37 @@ class RbTask < Issue
 
     return task
   end
+  
+  def self.create_with_relationships_without_project(params, user_id, is_impediment = false)
+    if Issue.const_defined? "SAFE_ATTRIBUTES"
+      attribs = params.clone.delete_if {|k,v| !RbTask::SAFE_ATTRIBUTES.include?(k) }
+    else
+      attribs = params.clone.delete_if {|k,v| !Issue.new.safe_attribute_names.include?(k.to_s) }
+    end
+    
+    attribs['author_id'] = user_id
+    attribs['tracker_id'] = RbTask.tracker
+    if params[:parent_issue_id] and task = RbTask.find_by_id(params[:parent_issue_id])
+      attribs['project_id'] = task.project_id
+    end
+
+    task = new(attribs)
+
+    valid_relationships = if is_impediment
+                            task.validate_blocks_list(params[:blocks])
+                          else
+                            true
+                          end
+
+    if valid_relationships && task.save!
+      task.move_before params[:next] unless is_impediment # impediments are not hosted under a single parent, so you can't tree-order them
+      task.update_blocked_list params[:blocks].split(/\D+/) if params[:blocks]
+    else
+      raise "Could not save task"
+    end
+
+    return task
+  end
 
   # TODO: there's an assumption here that impediments always have the
   # task-tracker as their tracker, and are top-level issues.

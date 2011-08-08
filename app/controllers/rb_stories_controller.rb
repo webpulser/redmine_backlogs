@@ -29,6 +29,7 @@ class RbStoriesController < RbApplicationController
   end
 
   def update
+    params.delete_if {|key, value| key == "project_id" }
     story = RbStory.find(params[:id])
     begin
       result = story.update_and_position!(params)

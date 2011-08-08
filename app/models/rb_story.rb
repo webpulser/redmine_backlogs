@@ -3,19 +3,24 @@ class RbStory < Issue
 
     acts_as_list
 
-    def self.condition(project_id, sprint_id, extras=[])
+    def self.condition(project_ids, sprint_id, extras=[])
       if sprint_id.nil?  
         c = ["
-          project_id = ?
+          project_id in (?)
           and tracker_id in (?)
           and fixed_version_id is NULL
-          and is_closed = ?", project_id, RbStory.trackers, false]
+          and is_closed = ?", project_ids, RbStory.trackers, false]
+      elsif project_ids.empty?
+        c = ["
+          tracker_id in (?)
+          and fixed_version_id = ?",
+          RbStory.trackers, sprint_id]
       else
         c = ["
-          project_id = ?
+          project_id in (?)
           and tracker_id in (?)
           and fixed_version_id = ?",
-          project_id, RbStory.trackers, sprint_id]
+          project_ids, RbStory.trackers, sprint_id]
       end
 
       if extras.size > 0
@@ -29,13 +34,13 @@ class RbStory < Issue
     # this forces NULLS-LAST ordering
     ORDER = 'case when issues.position is null then 1 else 0 end ASC, case when issues.position is NULL then issues.id else issues.position end ASC'
 
-    def self.backlog(project_id, sprint_id, options={})
+    def self.backlog(project_ids, sprint_id, options={})
       stories = []
 
 
       RbStory.find(:all,
             :order => RbStory::ORDER,
-            :conditions => RbStory.condition(project_id, sprint_id),
+            :conditions => RbStory.condition(project_ids, sprint_id),
             :joins => :status,
             :limit => options[:limit]).each_with_index {|story, i|
         story.rank = i + 1
@@ -46,11 +51,15 @@ class RbStory < Issue
     end
 
     def self.product_backlog(project, limit=nil)
-      return RbStory.backlog(project.id, nil, :limit => limit)
+      return RbStory.backlog(project.to_a.map(&:id), nil, :limit => limit)
     end
 
     def self.sprint_backlog(sprint, options={})
-      return RbStory.backlog(sprint.project.id, sprint.id, options)
+      unless options[:all].nil?
+        return RbStory.backlog([], sprint.id, options)
+      else
+        return RbStory.backlog([sprint.project.id], sprint.id, options)
+      end
     end
 
     def self.stories_open(project)

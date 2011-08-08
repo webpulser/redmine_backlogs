@@ -17,9 +17,11 @@ class RbApplicationController < ApplicationController
                  @release.project
                elsif params[:project_id]
                  Project.find(params[:project_id])
-               else
-                 raise "Cannot determine project (#{params.inspect})"
+               #else
+                 #raise "Cannot determine project (#{params.inspect})"
                end
+               
+    @projects = Project.all unless @project
   end
 
   def check_if_plugin_is_configured

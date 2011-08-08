@@ -20,6 +20,7 @@ ActionController::Routing::Routes.draw do |map|
     rb.connect    'server_variables/:project_id.:format',          :controller => :rb_server_variables, :action => 'show'
     rb.connect    ':project_id/conditional-jquery.:format',        :controller => :rb_server_variables, :action => 'jquery'
 
+    rb.connect    'master_backlog',                                :controller => :rb_master_backlogs,  :action => 'index'
     rb.connect    'master_backlog/:project_id',                    :controller => :rb_master_backlogs,  :action => 'show'
     rb.connect    'master_backlog/:project_id/menu.:format',       :controller => :rb_master_backlogs,  :action => 'menu'
 

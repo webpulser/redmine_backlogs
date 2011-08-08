@@ -42,7 +42,7 @@ Redmine::Plugin.register :redmine_backlogs do
         
     # Master backlog permissions
     permission :view_master_backlog, { 
-                                       :rb_master_backlogs  => [:show, :menu],
+                                       :rb_master_backlogs  => [:show, :menu, :index],
                                        :rb_sprints          => [:index, :show, :download],
                                        :rb_wikis            => :show,
                                        :rb_stories          => [:index, :show],
