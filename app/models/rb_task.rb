@@ -177,7 +177,7 @@ class RbTask < Issue
     jd = JournalDetail.find(:first, :order => "journals.created_on asc", :joins => :journal,
       :conditions => ["property = 'attr' and prop_key = 'estimated_hours' and journalized_type = 'Issue' and journalized_id = ?", self.id])
     if jd
-      if !jd.old_value || Float(jd.old_value) != hours
+      if !jd.old_value || Float(jd.old_value.to_f) != hours
         JournalDetail.connection.execute("update journal_details set old_value='#{hours.to_s.gsub(/\.0+$/, '')}' where id = #{jd.id}")
       end
     else

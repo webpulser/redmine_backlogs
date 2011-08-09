@@ -63,8 +63,13 @@ module Backlogs
         # unsaved issue object
         return nil unless self.id && self.is_task?
 
-        return Issue.find(:first, :order => 'lft DESC',
-          :conditions => [ "root_id = ? and lft < ? and tracker_id in (?)", self.root_id, self.lft, RbStory.trackers ]).becomes(RbStory)
+        issue = Issue.find(:first, :order => 'lft DESC',
+          :conditions => [ "root_id = ? and lft < ? and tracker_id in (?)", self.root_id, self.lft, RbStory.trackers ])
+        if issue  
+          return issue.becomes(RbStory)
+        else
+	  return false
+	end
       end
 
       def blocks

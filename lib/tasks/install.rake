@@ -32,7 +32,7 @@ namespace :redmine do
       if !corruption_test
         puts "Assuming no database corruption"
       else
-        issues = Issue.all + []
+        issues = [] #Issue.all + []
         problems = []
         tested = 0
         if issues.size != 0

@@ -17,8 +17,8 @@ class BurndownFromJournal < ActiveRecord::Migration
             chunk.each {|issue|
               issue = RbTask.find(issue.id)
               ids << issue.id.to_s
-              initial = issue.estimated_hours
-              issue.estimated_hours = issue.remaining_hours
+              initial = issue.estimated_hours.to_f
+              issue.estimated_hours = issue.remaining_hours.to_f
               issue.save!
               issue.set_initial_estimate(initial) if initial && initial != 0
             }

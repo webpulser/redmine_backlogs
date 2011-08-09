@@ -22,6 +22,7 @@ class RbApplicationController < ApplicationController
                end
                
     @projects = Project.all unless @project
+    @project = @projects.last if @projects
   end
 
   def check_if_plugin_is_configured
