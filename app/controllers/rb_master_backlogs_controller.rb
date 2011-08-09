@@ -6,7 +6,6 @@ class RbMasterBacklogsController < RbApplicationController
   def index
     product_backlog_stories = RbStory.product_backlog(@projects)
     sprints = RbSprint.all_open_sprints(@projects.map(&:id))
-    @project = Project.first
     
     last_story = RbStory.find(
                           :first, 
