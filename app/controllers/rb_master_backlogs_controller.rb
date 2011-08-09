@@ -32,7 +32,7 @@ class RbMasterBacklogsController < RbApplicationController
                           )
     @last_update = (last_story ? last_story.updated_on : nil)
     @product_backlog = { :sprint => nil, :stories => product_backlog_stories }
-    @sprint_backlogs = sprints.map{ |s| { :sprint => s, :stories => s.stories } }
+    @sprint_backlogs = sprints.map{ |s| { :sprint => s, :stories => RbStory.sprint_backlog_with_project(s, @project) } }
 
     respond_to do |format|
       format.html { render :layout => "rb"}

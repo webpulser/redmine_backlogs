@@ -22,7 +22,7 @@ class RbApplicationController < ApplicationController
                end
                
     @projects = Project.all(:conditions => { :status => 1, :is_public => 1 } ) unless @project
-    @project = @projects.first if @projects
+    @project = @projects.last if @projects
   end
 
   def check_if_plugin_is_configured

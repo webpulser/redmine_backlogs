@@ -19,8 +19,9 @@ class RbStory < Issue
         c = ["
           project_id in (?)
           and tracker_id in (?)
-          and fixed_version_id = ?",
-          project_ids, RbStory.trackers, sprint_id]
+          and fixed_version_id = ?
+          and is_closed = ?",
+          project_ids, RbStory.trackers, sprint_id, false]
       end
 
       if extras.size > 0
@@ -60,6 +61,10 @@ class RbStory < Issue
       else
         return RbStory.backlog([sprint.project.id], sprint.id, options)
       end
+    end
+    
+    def self.sprint_backlog_with_project(sprint, project)
+      return RbStory.backlog([project.id], sprint.id)
     end
 
     def self.stories_open(project)
