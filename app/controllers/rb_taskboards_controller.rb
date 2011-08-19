@@ -27,7 +27,6 @@ class RbTaskboardsController < RbApplicationController
   
   def index
     @projects = Project.all(:conditions => { :status => 1, :is_public => 0 } )
-    @issue_statuses_categories = IssueStatusesCategory.all
     @statuses = Tracker.find_by_id(RbTask.tracker).issue_statuses
     @stories = @sprint.all_stories
 
