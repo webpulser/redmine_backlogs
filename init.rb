@@ -63,7 +63,7 @@ Redmine::Plugin.register :redmine_backlogs do
                                      }
     
     permission :view_taskboards,     { 
-                                       :rb_taskboards       => :show,
+                                       :rb_taskboards       => [:index, :show],
                                        :rb_sprints          => :show,
                                        :rb_stories          => [:index, :show],
                                        :rb_tasks            => [:index, :show],

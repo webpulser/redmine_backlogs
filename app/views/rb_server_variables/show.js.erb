@@ -3,7 +3,9 @@ if(RB==null){
 }
 
 RB.constants = {
-  project_id: <%= @project.id %>,
+  <% if @project %>
+    project_id: <%= @project.id %>,
+  <% end %>
   sprint_id: <%= @sprint ? @sprint.id : "null" %>,
   protect_against_forgery: <%= protect_against_forgery? ? "true" : "false" %>,
   request_forgery_protection_token: '<%= request_forgery_protection_token %>',
@@ -56,6 +58,12 @@ RB.urlFor = function(route_name, options){
   return route;
 }
 
+<% if params[:project_id] %>
+  backlog_menu = '<%= url_for(:controller => 'rb_master_backlogs', :action => 'menu', :project_id => @project.id, :format => :json, :only_path => true) %>'
+<% else %>
+  backlog_menu = '<%= url_for(:controller => 'rb_master_backlogs', :action => 'menu', :format => :json, :only_path => true) %>'
+<% end %>
+
 RB.routes = {
   create_sprint: '<%= url_for(:controller => 'rb_sprints', :action => 'create') %>',
   update_sprint: '<%= url_for(:controller => 'rb_sprints', :action => 'update', :sprint_id => ":id") %>',
@@ -71,8 +79,8 @@ RB.routes = {
 
   show_updated_items: '<%= url_for(:controller => 'rb_updated_items', :action => 'show', :project_id => ":id") %>',
   show_burndown_chart: '<%= url_for(:controller => 'rb_burndown_charts', :action => 'show', :sprint_id => ":id") %>',
-
-  backlog_menu: '<%= url_for(:controller => 'rb_master_backlogs', :action => 'menu', :project_id => @project.identifier, :format => :json, :only_path => true) %>'
+  
+  backlog_menu: backlog_menu
 }
 
 if(typeof console != "undefined" && console != null) console.log('*** server variables loaded ***');

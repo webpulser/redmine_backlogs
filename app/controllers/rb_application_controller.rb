@@ -15,13 +15,13 @@ class RbApplicationController < ApplicationController
                elsif params[:release_id]
                  load_release
                  @release.project
-               elsif params[:project_id]
+               elsif params[:project_id] and params[:project_id] != 'undefined'
                  Project.find(params[:project_id])
                #else
                  #raise "Cannot determine project (#{params.inspect})"
                end
                
-    @projects = Project.all(:conditions => { :status => 1, :is_public => 1 } ) unless @project
+    @projects = Project.all(:conditions => { :status => 1, :is_public => 0 } ) unless @project
     @project = @projects.last if @projects
   end
 

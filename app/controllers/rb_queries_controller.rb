@@ -3,6 +3,7 @@ class RbQueriesController < RbApplicationController
 
   def show
     @query = Query.new(:name => "_")
+    @project = Project.find_by_id(params[:project_id])
     @query.project = @project
 
     if params[:sprint_id]
