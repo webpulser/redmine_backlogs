@@ -18,14 +18,6 @@
               :action => 'show',
               :project_id => project.id
               }) %><br/>
-      <% if BacklogsCards::LabelStock.selected_label %>
-        <%= link_to(l(:label_product_cards), {
-                :controller => 'rb_stories',
-                :action => 'index',
-                :project_id => project.id,
-                :format => 'pdf'
-                }) %><br/>
-      <% end %>
     <% end %>
 
     <% if Setting.rest_api_enabled? && key %>
@@ -55,32 +47,5 @@
                 :sprint_id => sprint.id
                 })
         %><br/>
-
-        <% if BacklogsCards::LabelStock.selected_label %>
-          <%= link_to(l(:label_sprint_cards), {
-                  :controller => 'rb_stories',
-                  :action => 'index',
-                  :project_id => project.id,
-                  :sprint_id => sprint.id,
-                  :format => 'pdf'
-                  })
-          %><br/>
-        <% end %>
-        <% if project.enabled_modules.any? {|m| m.name=="wiki"} %>
-            <%= link_to(l(:label_wiki), {
-                    :controller => 'rb_wikis',
-                    :action => 'show',
-                    :project_id => project.id,
-                    :sprint_id => sprint.id
-                    })
-            %><br/>
-        <% end %>
-        <%= link_to(l(:label_impediments), {
-                :controller => 'rb_queries',
-                :action => 'impediments',
-                :project_id => project.id,
-                :sprint_id => sprint.id
-                }) %><br/>
-        <%=# render :partial => "rb_burndown_charts/burndown", :locals => {:sprint => sprint, :mode => :minimal, :style => 'margin-left:0px; margin-top:20px; width:250px; height:192px;' } %>
     <% end %>
 </div>
