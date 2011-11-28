@@ -33,7 +33,7 @@ class RbStory < Issue
     end
 
     # this forces NULLS-LAST ordering
-    ORDER = 'case when issues.position is null then 1 else 0 end ASC, case when issues.position is NULL then issues.id else issues.position end ASC'
+    ORDER = 'issues.story_points ASC, case when issues.position is null then 1 else 0 end ASC, case when issues.position is NULL then issues.id else issues.position end ASC'
 
     def self.backlog(project_ids, sprint_id, options={})
       stories = []
